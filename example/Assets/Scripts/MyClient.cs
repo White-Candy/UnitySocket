@@ -51,6 +51,7 @@ namespace MyClient
 
         void OnDestroy()
         {
+            SendMessageTOServer("Close");
             socket.Close();
         }
 
@@ -75,7 +76,7 @@ namespace MyClient
 
         public void SendMessageTOServer(string mess)
         {
-            var message = "Message from client : " + mess;
+            var message = mess;
             var outputBuffer = Encoding.Unicode.GetBytes(message);
             socket.BeginSend(outputBuffer, 0, outputBuffer.Length, SocketFlags.None, null, null);
         }
