@@ -6,9 +6,18 @@ using System.Net.Sockets;
 using UnityEngine.UI;
 using UnityEngine;
 using System;
+using LitJson;
 
 namespace MyClient
 {
+
+    [Serializable]
+    public class RetureClientBody
+    {
+        public string type;
+        public string body;
+    }
+
     public class MyClient : MonoBehaviour
     {
         public Text serverRet;
@@ -38,9 +47,20 @@ namespace MyClient
             {
                 SendMessageTOServer("Hello");
             }
-            else if (Input.GetKeyUp(KeyCode.W))
+            else if (Input.GetKeyDown(KeyCode.W))
             {
                 SendMessageTOServer("World");
+            }
+            else if (Input.GetKeyDown(KeyCode.E))
+            {
+                RetureClientBody body = new RetureClientBody();
+
+                body.type = "Close";
+                //body.body = JsonMapper.ToJson(null);
+                string mess = JsonMapper.ToJson(body);
+                Debug.Log(mess);
+
+                SendMessageTOServer(mess);
             }
 
             if (message != null)
@@ -63,7 +83,8 @@ namespace MyClient
                 var length = socket.EndReceive(ar);
                 message = Encoding.Unicode.GetString(buffer, 0, length);
 
-                Debug.Log(message);
+                if (!string.IsNullOrEmpty(message)) 
+                    Debug.Log(message);
 
                 //接收下一个消息(因为这是一个递归的调用，所以这样就可以一直接收消息了）
                 socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(ClientReceive), socket);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LitJson;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -30,6 +31,7 @@ namespace CandySocket
             }
         }
 
+        public bool Exit = false;
         public void StartListen(int port)
         {
             m_port = port;
@@ -69,7 +71,7 @@ namespace CandySocket
         public void ReciveMessage(object obj)
         {
             Socket client = obj as Socket;
-            while (true)
+            while (!Exit)
             {
                 try
                 {
@@ -77,12 +79,8 @@ namespace CandySocket
                     string message = Encoding.Unicode.GetString(result, 0, length);
 
                     if (!string.IsNullOrEmpty(message))
-                        Debug.Log(message);
-
-                    if (!string.IsNullOrEmpty(message) && message == "Close")
                     {
-                        Thread.CurrentThread.Abort();
-                        break;
+                        CliRetInfoProcess(message);
                     }
                 }
                 catch (Exception ex)
@@ -91,7 +89,18 @@ namespace CandySocket
                     client.Shutdown(SocketShutdown.Both);
                     client.Close(0);
                 }
+            }
+        }
 
+        public void CliRetInfoProcess(string ret)
+        {
+            Debug.Log(ret);
+            ReciveClientBody body = JsonController.Instance.StringToJson(ret);
+
+            if (body != null)
+            {
+                IEvent spawn = EventSpawn.CreateEvent(body.type);
+                spawn.CliRetInfoProcess(body.body);
             }
         }
 
