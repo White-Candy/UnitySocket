@@ -14,10 +14,11 @@ namespace CandySocket
         private static byte[] result = new byte[1024];
         private static int m_port;
         private static Socket socket;
+        //private static Socket client;
 
         private Thread thread;
         private List<Thread> ctList = new List<Thread>();
-
+        DatabaseController data;
         private static ServerContorller m_instance;
         public static ServerContorller Instance
         {
@@ -39,8 +40,8 @@ namespace CandySocket
 
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(ip_end);
-            socket.Listen(5);
-
+            socket.Listen(10);
+            data = new DatabaseController();
             thread = new Thread(ClientConnectListen);
             thread.Start();
         }
@@ -48,9 +49,16 @@ namespace CandySocket
         // 客户端连接请求监听
         public void ClientConnectListen()
         {
+            Debug.Log("ClientConnectListen");
+            data.Kinder.users.Add(new UserTable());
+
             while (true)
             {
-                Socket client = SendToClient("Hi there, I accept you request at " + DateTime.Now.ToString());
+                Socket client = socket.Accept();
+                Debug.Log(string.Format("客户端{0}成功链接", client.RemoteEndPoint));
+
+                string mess = "Hi there, I accept you request at " + DateTime.Now.ToString();
+                SendToClient(client, mess);
 
                 //开启线程接收客户端信息
                 Thread clientThread = new Thread(ReciveMessage);
@@ -60,11 +68,9 @@ namespace CandySocket
         }
 
         // 发送信息
-        public Socket SendToClient(string mess)
+        public void SendToClient(Socket cli, string mess)
         {
-            Socket client = socket.Accept();
-            client.Send(Encoding.Unicode.GetBytes(mess));
-            return client;
+            cli.Send(Encoding.Unicode.GetBytes(mess));
         }
 
         // 接收客户端的讯息
@@ -80,19 +86,22 @@ namespace CandySocket
 
                     if (!string.IsNullOrEmpty(message))
                     {
-                        CliRetInfoProcess(message);
+                        CliRetInfoProcess(client, message);
                     }
                 }
                 catch (Exception ex)
                 {
                     Debug.Log(ex.Message);
-                    client.Shutdown(SocketShutdown.Both);
-                    client.Close(0);
+                    if (client != null)
+                    {
+                        client.Shutdown(SocketShutdown.Receive);
+                        client.Close(0);
+                    }
                 }
             }
         }
 
-        public void CliRetInfoProcess(string ret)
+        public void CliRetInfoProcess(Socket cli, string ret)
         {
             Debug.Log(ret);
             ReciveClientBody body = JsonController.Instance.StringToJson(ret);
@@ -100,21 +109,28 @@ namespace CandySocket
             if (body != null)
             {
                 IEvent spawn = EventSpawn.CreateEvent(body.type);
-                spawn.CliRetInfoProcess(body.body);
+                spawn.CliRetInfoProcess(cli, body.body);
             }
         }
 
         public void Clear()
         {
-            socket.Close();
-            thread.Abort();
-            thread = null;
-
-            Debug.Log(ctList.Count);
-            for (int i = 0; i < ctList.Count; i++)
+            try
             {
-                ctList[i].Abort();
-                ctList[i] = null;
+                socket.Close();
+                thread.Abort();
+                thread = null;
+
+                Debug.Log(ctList.Count);
+                for (int i = 0; i < ctList.Count; i++)
+                {
+                    ctList[i].Abort();
+                    ctList[i] = null;
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.Log("Clear: " + ex.Message);
             }
         }
 

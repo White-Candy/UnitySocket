@@ -15,15 +15,7 @@ public class Launcher : MonoBehaviour
     void Start()
     {
         ServerContorller.Instance.StartListen(4530);
-
-        RetureClientBody body = new RetureClientBody();
-
-        body.state = "Close";
-        //body.body = JsonMapper.ToJson(null);
-        string mess = JsonMapper.ToJson(body);
-        Debug.Log(mess);
-
-        JsonMapper.ToObject(mess);
+        //DatabaseController.Kinder.users.Add(new UserTable());
     }
 
     // Update is called once per frame

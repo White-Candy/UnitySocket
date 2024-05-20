@@ -7,9 +7,13 @@ using UnityEngine;
 public class UserTable
 {
     public int id;
-    public string user;
+    public string name;
     public string password;
-    public int scores;
+    public string registry;
+    public string login;
+    public int score;
+    public int score2;
+    public int score3;
 }
 
 [CreateAssetMenu(fileName = "Kinder", menuName = "DataBase/KinderDatabase")]

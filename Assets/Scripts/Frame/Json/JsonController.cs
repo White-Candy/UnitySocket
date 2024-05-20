@@ -40,7 +40,14 @@ namespace CandySocket
             RetureClientBody body = new RetureClientBody();
 
             body.state = state;
-            body.body = JsonMapper.ToJson(obj);
+            try
+            {
+                body.body = JsonMapper.ToJson(obj);
+            }
+            catch
+            {
+                body.body = obj.ToString();
+            }
             return JsonMapper.ToJson(body);
         }
 
@@ -51,8 +58,9 @@ namespace CandySocket
             ReciveClientBody recive = new ReciveClientBody();
 
             JsonData data = JsonMapper.ToObject(json);
+
             JsonData body = checkStringIsJson(data["body"]?.ToString()) ? 
-                JsonMapper.ToObject(data["body"]?.ToString()) : new JsonData();
+                JsonMapper.ToObject(data["body"]?.ToString()) : null;
 
             recive.type = (EventType)Enum.Parse(typeof(EventType), data["type"]?.ToString());
             recive.body = body;

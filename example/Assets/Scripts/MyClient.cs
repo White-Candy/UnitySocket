@@ -7,6 +7,10 @@ using UnityEngine.UI;
 using UnityEngine;
 using System;
 using LitJson;
+using System.Net;
+using System.Threading;
+using UnityEditor.Experimental.UIElements.GraphView;
+using UnityEditor.PackageManager;
 
 namespace MyClient
 {
@@ -23,44 +27,52 @@ namespace MyClient
         public Text serverRet;
 
         private static Socket socket;
-        private static string message;
 
         static byte[] buffer = new byte[1024];
-        private float timer = 2f;
+        private static string message;
 
-        // Start is called before the first frame update
+        private bool isConnect = false;
+        private string IpStr = "127.0.0.1";
+        private int port = 4530;
+        private Thread thread;
+
         void Start()
         {
-            var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            socket.Connect("localhost", 4530);
+            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            try
+            {
+                isConnect = true;
+                socket.Connect(IpStr, 4530);
+                Debug.Log("链接服务器成功");
+                thread = new Thread(ReciveMessage);
+                thread.Start();
+            }
+            catch
+            {
+                isConnect = false;
+            }
 
-
-            socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None,
-                new AsyncCallback(ClientReceive), socket);
-
-            //Console.Read();
         }
 
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                SendMessageTOServer("Hello");
+                Send("Hello");
             }
             else if (Input.GetKeyDown(KeyCode.W))
             {
-                SendMessageTOServer("World");
+                Send("World");
             }
             else if (Input.GetKeyDown(KeyCode.E))
             {
                 RetureClientBody body = new RetureClientBody();
 
                 body.type = "Close";
-                //body.body = JsonMapper.ToJson(null);
                 string mess = JsonMapper.ToJson(body);
                 Debug.Log(mess);
 
-                SendMessageTOServer(mess);
+                Send(mess);
             }
 
             if (message != null)
@@ -69,37 +81,42 @@ namespace MyClient
             }
         }
 
+        public void ReciveMessage()
+        {
+            while (true)
+            {
+                try
+                {
+                    int num = socket.Receive(buffer);
+                    var length = buffer.Length;
+                    string mess = Encoding.Unicode.GetString(buffer, 0, length);
+
+                    Debug.Log(mess);
+                }
+                catch (Exception ex)
+                {
+                    Debug.Log(ex);
+                    socket.Shutdown(SocketShutdown.Both);
+                    socket.Close();
+                }
+            }
+        }
+
+        public void Send(string mess)
+        {
+            if (isConnect)
+            {
+                var message = mess;
+                var outputBuffer = Encoding.Unicode.GetBytes(message);
+                socket.BeginSend(outputBuffer, 0, outputBuffer.Length, SocketFlags.None, null, null);
+            }
+        }
+
         void OnDestroy()
         {
-            SendMessageTOServer("Close");
+            Send("Close");
             socket.Close();
-        }
-
-        public static void ClientReceive(IAsyncResult ar) 
-        {
-            try
-            {
-                socket = ar.AsyncState as Socket;
-                var length = socket.EndReceive(ar);
-                message = Encoding.Unicode.GetString(buffer, 0, length);
-
-                if (!string.IsNullOrEmpty(message)) 
-                    Debug.Log(message);
-
-                //接收下一个消息(因为这是一个递归的调用，所以这样就可以一直接收消息了）
-                socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(ClientReceive), socket);
-            }
-            catch (Exception ex)
-            {
-                //Debug.Log("Catch: " + ex.Message);
-            }
-        }
-
-        public void SendMessageTOServer(string mess)
-        {
-            var message = mess;
-            var outputBuffer = Encoding.Unicode.GetBytes(message);
-            socket.BeginSend(outputBuffer, 0, outputBuffer.Length, SocketFlags.None, null, null);
+            thread.Abort();
         }
     }
 }
