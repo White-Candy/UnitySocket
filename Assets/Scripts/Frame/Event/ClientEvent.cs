@@ -12,7 +12,7 @@ namespace CandySocket
         None,
         Close,
         Login, 
-        Logon,
+        Logon
     }
 
     public interface IEvent
@@ -34,20 +34,16 @@ namespace CandySocket
         public void CliRetInfoProcess(Socket cli, JsonData body)
         {
             Debug.Log("LogonEvent");
-            //if (body == null) return;
-
+            
             string Ret = "Faild";
-            bool new_user = DatabaseController.Instance.LogonMethod(body);
-            if (new_user == true)
+            bool state = DatabaseController.LogonMethod(body);
+            if (state == true)
             {
-                Debug.Log("is Not -1");
-                //DatabaseController.Kinder.users.Add(new_user);
                 Ret = "Success";
             }
-                      
-            Debug.Log("LogonEvent JsonToString");
+            
             string json = JsonController.Instance.JsonToString<string>("Logon", Ret);
-            Debug.Log("LogonEvent: " + json);
+            Debug.Log("dddddd: " + json);
             ServerContorller.Instance.SendToClient(cli, json);
         }
     }

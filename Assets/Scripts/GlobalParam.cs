@@ -1,18 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using UnityEngine;
 
-public class GlobalParam : MonoBehaviour
+public class ClientPkg
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Socket cli;
+    public string ret;
 
-    // Update is called once per frame
-    void Update()
+    public ClientPkg(Socket cli, string ret)
     {
-        
+        this.cli = cli;
+        this.ret = ret;
     }
+}
+
+public static class GlobalParam
+{
+    public static Queue<ClientPkg> MessageQueue = new Queue<ClientPkg>();
 }

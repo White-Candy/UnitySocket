@@ -14,11 +14,9 @@ namespace CandySocket
         private static byte[] result = new byte[1024];
         private static int m_port;
         private static Socket socket;
-        //private static Socket client;
-
         private Thread thread;
         private List<Thread> ctList = new List<Thread>();
-        DatabaseController data;
+
         private static ServerContorller m_instance;
         public static ServerContorller Instance
         {
@@ -41,7 +39,7 @@ namespace CandySocket
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(ip_end);
             socket.Listen(10);
-            data = new DatabaseController();
+
             thread = new Thread(ClientConnectListen);
             thread.Start();
         }
@@ -49,9 +47,6 @@ namespace CandySocket
         // 客户端连接请求监听
         public void ClientConnectListen()
         {
-            Debug.Log("ClientConnectListen");
-            data.Kinder.users.Add(new UserTable());
-
             while (true)
             {
                 Socket client = socket.Accept();
@@ -104,13 +99,7 @@ namespace CandySocket
         public void CliRetInfoProcess(Socket cli, string ret)
         {
             Debug.Log(ret);
-            ReciveClientBody body = JsonController.Instance.StringToJson(ret);
-
-            if (body != null)
-            {
-                IEvent spawn = EventSpawn.CreateEvent(body.type);
-                spawn.CliRetInfoProcess(cli, body.body);
-            }
+            GlobalParam.MessageQueue.Enqueue(new ClientPkg(cli, ret)); 
         }
 
         public void Clear()
