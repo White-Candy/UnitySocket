@@ -12,7 +12,8 @@ namespace CandySocket
         None,
         Close,
         Login, 
-        Logon
+        Logon,
+        Search
     }
 
     public interface IEvent
@@ -24,8 +25,22 @@ namespace CandySocket
     {
         public void CliRetInfoProcess(Socket cli, JsonData body)
         {
-            Debug.Log("LoginEvent");
-            ServerContorller.Instance.SendToClient(cli, "LoginEventFinish!");
+            Debug.Log("LoginEvent: " + body.ToJson());
+
+            string Ret = "Faild";
+            bool state = DatabaseController.LoginMethod(body);
+            UserTable user = DatabaseController.SearchUserUseName(body);
+            if (state == true)
+            {
+                Ret = "Success";
+            }
+
+            JsonData data = new JsonData();
+            data["state"] = Ret;
+            data["user_id"] = user.id.ToString();
+
+            string json = JsonController.Instance.JsonToString("Login", data);
+            ServerContorller.Instance.SendToClient(cli, json);
         }
     }
 
@@ -33,17 +48,16 @@ namespace CandySocket
     {
         public void CliRetInfoProcess(Socket cli, JsonData body)
         {
-            Debug.Log("LogonEvent");
-            
             string Ret = "Faild";
             bool state = DatabaseController.LogonMethod(body);
             if (state == true)
             {
                 Ret = "Success";
             }
-            
-            string json = JsonController.Instance.JsonToString<string>("Logon", Ret);
-            Debug.Log("dddddd: " + json);
+
+            JsonData data = new JsonData();
+            data["state"] = Ret;
+            string json = JsonController.Instance.JsonToString("Logon", data);
             ServerContorller.Instance.SendToClient(cli, json);
         }
     }
@@ -57,6 +71,18 @@ namespace CandySocket
 
             Thread.CurrentThread.Abort();
             ServerContorller.Instance.Exit = true;
+        }
+    }
+
+    public class SearchEvent : IEvent
+    {
+        public void CliRetInfoProcess(Socket cli, JsonData body)
+        {
+            Debug.Log("Search");
+            UserTable user = DatabaseController.SearchUserUseID(body);
+            JsonData data = JsonMapper.ToObject(JsonMapper.ToJson(user));       
+            string json = JsonController.Instance.JsonToString("Search", data);
+            ServerContorller.Instance.SendToClient(cli, json);
         }
     }
 

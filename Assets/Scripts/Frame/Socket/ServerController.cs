@@ -50,7 +50,6 @@ namespace CandySocket
             while (true)
             {
                 Socket client = socket.Accept();
-                Debug.Log(string.Format("客户端{0}成功链接", client.RemoteEndPoint));
 
                 string mess = "Hi there, I accept you request at " + DateTime.Now.ToString();
                 SendToClient(client, mess);
@@ -89,7 +88,7 @@ namespace CandySocket
                     Debug.Log(ex.Message);
                     if (client != null)
                     {
-                        client.Shutdown(SocketShutdown.Receive);
+                        client.Shutdown(SocketShutdown.Both);
                         client.Close(0);
                     }
                 }

@@ -16,8 +16,6 @@ public class Launcher : MonoBehaviour
     void Start()
     {
         ServerContorller.Instance.StartListen(4530);
-        GlobalParam.MessageQueue.Enqueue(new ClientPkg(null, "{\"type\":\"Logon\",\"body\":{\"ID\":0,\"name\":\"123\"," +
-            "\"password\":\"123\", \"registry\":\"\",\"login\":\"\",\"score\":0,\"score2\":0,\"score3\":0}}"));
     }
 
     // Update is called once per frame

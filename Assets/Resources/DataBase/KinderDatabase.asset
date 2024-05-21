@@ -12,4 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a313bb588c43064ebd3ecb1f00f0c46, type: 3}
   m_Name: KinderDatabase
   m_EditorClassIdentifier: 
-  users: []
+  users:
+  - id: 0
+    name: Sugar
+    password: 123
+    registry: 05/21/2024 15:31:42
+    login: 01/01/0001 00:00:00
+    score: 0
+    score2: 0
+    score3: 0
+  - id: 1
+    name: ddd
+    password: ddd
+    registry: 05/21/2024 15:33:05
+    login: 01/01/0001 00:00:00
+    score: 0
+    score2: 0
+    score3: 0
+  - id: 2
+    name: sd
+    password: sdsd
+    registry: 05/21/2024 15:36:14
+    login: 01/01/0001 00:00:00
+    score: 0
+    score2: 0
+    score3: 0

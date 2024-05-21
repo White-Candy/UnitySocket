@@ -9,8 +9,8 @@ namespace CandySocket
     [Serializable]
     public class RetureClientBody
     {
-        public string state;
-        public string body;
+        public string type; //enum: EventType
+        public string body; //exp: body: {state:Failed}
     }
 
     [Serializable]
@@ -35,18 +35,18 @@ namespace CandySocket
             }
         }
 
-        public string JsonToString<T>(T obj, string state)
+        public string JsonToString<T>(T obj, JsonData data)
         {
             RetureClientBody body = new RetureClientBody();
-
-            body.state = state;
+            body.body = data.ToJson();
             try
             {
-                body.body = JsonMapper.ToJson(obj);
+                body.type = JsonMapper.ToJson(obj);
             }
             catch
             {
-                body.body = obj.ToString();
+                string type = obj.ToString();
+                body.type = type;
             }
             return JsonMapper.ToJson(body);
         }

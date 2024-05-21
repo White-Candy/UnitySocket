@@ -22,17 +22,20 @@ public static class DatabaseController
 
     public static bool LogonMethod(JsonData body)
     {
+        if (CheckThisUserEx(body["name"]?.ToString()))
+            return false;
+
         try
         {
             UserTable user = new UserTable();
             user.id = Kinder.users.Count;
-            //user.name = body["name"]?.ToString();
-            //user.password = body["password"]?.ToString();
-            //user.registry = body["registry"]?.ToString();
-            //user.login = body["login"]?.ToString();
-            //user.score = int.Parse(body["score"]?.ToString());
-            //user.score2 = int.Parse(body["score2"]?.ToString());
-            //user.score3 = int.Parse(body["score3"]?.ToString());
+            user.name = body["name"]?.ToString();
+            user.password = body["password"]?.ToString();
+            user.registry = body["registry"]?.ToString();
+            user.login = body["login"]?.ToString();
+            user.score = int.Parse(body["score"]?.ToString());
+            user.score2 = int.Parse(body["score2"]?.ToString());
+            user.score3 = int.Parse(body["score3"]?.ToString());
 
             Kinder.users.Add(user);
             return true;
@@ -42,5 +45,38 @@ public static class DatabaseController
             Debug.Log(ex.Message);
             return false;
         }
+    }
+
+    public static bool LoginMethod(JsonData body)
+    {
+        try
+        {
+            return CheckThisUserEx(body["name"]?.ToString());
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public static UserTable SearchUserUseName(JsonData body)
+    {
+        UserTable user = new UserTable();
+        string name = body["name"]?.ToString();
+        user = Kinder.users.Find(x => x.name == name);
+        return user;
+    }
+
+    public static UserTable SearchUserUseID(JsonData body)
+    {
+        UserTable user = new UserTable();
+        int ID = int.Parse(body["ID"]?.ToString());
+        user = Kinder.users.Find(x => x.id == ID);
+        return user;
+    }
+
+    public static bool CheckThisUserEx(string name)
+    {
+        return Kinder.users.Exists(x => x.name == name);
     }
 }
