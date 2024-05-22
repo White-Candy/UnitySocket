@@ -13,7 +13,8 @@ namespace CandySocket
         Close,
         Login, 
         Logon,
-        Search
+        Search,
+        UpdateInfo
     }
 
     public interface IEvent
@@ -30,14 +31,14 @@ namespace CandySocket
             string Ret = "Faild";
             bool state = DatabaseController.LoginMethod(body);
             UserTable user = DatabaseController.SearchUserUseName(body);
+            JsonData data = new JsonData();
             if (state == true)
             {
                 Ret = "Success";
+                data["user_id"] = user.id.ToString();
             }
 
-            JsonData data = new JsonData();
             data["state"] = Ret;
-            data["user_id"] = user.id.ToString();
 
             string json = JsonController.Instance.JsonToString("Login", data);
             ServerContorller.Instance.SendToClient(cli, json);
@@ -86,4 +87,22 @@ namespace CandySocket
         }
     }
 
+    public class UpdateInfo : IEvent
+    {
+        public void CliRetInfoProcess(Socket cli, JsonData body)
+        {
+            Debug.Log("UpdateInfo");
+            bool is_update = DatabaseController.UpdateUserInfo(body);
+            string Ret = "Faild";
+
+            if (is_update)
+            {
+                Ret = "Success";
+            }
+            JsonData data = new JsonData();
+            data["state"] = Ret;
+            string json = JsonController.Instance.JsonToString("UpdateInfo", data);
+            ServerContorller.Instance.SendToClient(cli, json);
+        }
+    }
 }

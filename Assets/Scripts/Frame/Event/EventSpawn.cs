@@ -19,6 +19,8 @@ namespace CandySocket
                     return new CloseEvent();
                 case EventType.Search:
                     return new SearchEvent();
+                case EventType.UpdateInfo:
+                    return new UpdateInfo();
                 default:
                     throw new ArgumentException("无效的策略类型");
             }
