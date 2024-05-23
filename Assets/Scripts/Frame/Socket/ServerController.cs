@@ -70,9 +70,9 @@ namespace CandySocket
         // 接收客户端的讯息
         public void ReciveMessage(object obj)
         {
-            Socket client = obj as Socket;
             while (!Exit)
             {
+                Socket client = obj as Socket;
                 try
                 {
                     int length = client.Receive(result);
@@ -85,6 +85,7 @@ namespace CandySocket
                 }
                 catch (Exception ex)
                 {
+                    //GlobalParam.uimessage.AdditionalContent(ex.Message);
                     Debug.Log(ex.Message);
                     if (client != null)
                     {
@@ -118,6 +119,7 @@ namespace CandySocket
             }
             catch(Exception ex)
             {
+                //GlobalParam.uimessage.AdditionalContent("Clear: " + ex.Message);
                 Debug.Log("Clear: " + ex.Message);
             }
         }

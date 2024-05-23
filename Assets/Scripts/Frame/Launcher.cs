@@ -4,12 +4,6 @@ using System.Threading;
 using UnityEngine;
 using CandySocket;
 using System.Net.Sockets;
-using System.Net;
-using System.Text;
-using System;
-using UnityEditor.Experimental.UIElements.GraphView;
-using LitJson;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class Launcher : MonoBehaviour
 {
@@ -27,6 +21,7 @@ public class Launcher : MonoBehaviour
             Socket cli = pkg.cli;
             string ret = pkg.ret;
 
+            GlobalParam.uimessage.AdditionalContent(ret);
             ReciveClientBody body = JsonController.Instance.StringToJson(ret);
             if (body != null)
             {

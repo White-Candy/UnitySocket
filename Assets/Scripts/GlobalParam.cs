@@ -3,19 +3,23 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using UnityEngine;
 
-public class ClientPkg
+namespace CandySocket
 {
-    public Socket cli;
-    public string ret;
-
-    public ClientPkg(Socket cli, string ret)
+    public class ClientPkg
     {
-        this.cli = cli;
-        this.ret = ret;
-    }
-}
+        public Socket cli;
+        public string ret;
 
-public static class GlobalParam
-{
-    public static Queue<ClientPkg> MessageQueue = new Queue<ClientPkg>();
+        public ClientPkg(Socket cli, string ret)
+        {
+            this.cli = cli;
+            this.ret = ret;
+        }
+    }
+
+    public static class GlobalParam
+    {
+        public static Queue<ClientPkg> MessageQueue = new Queue<ClientPkg>();
+        public static UIMessage uimessage = GameObject.Find("UI").GetComponent<UIMessage>();
+    }
 }
