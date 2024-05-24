@@ -12,10 +12,11 @@ namespace CandySocket
         None,
         Close,
         Login,
-        ManagerLogin,
         Logon,
         Search,
-        UpdateInfo
+        UpdateInfo,
+        ManagerLogin,
+        ManagerUsersInfo,
     }
 
     public interface IEvent
@@ -124,6 +125,14 @@ namespace CandySocket
 
             string json = JsonController.Instance.JsonToString("ManagerLogin", data);
             ServerContorller.Instance.SendToClient(cli, json);
+        }
+    }
+
+    public class ManagerUsersInfo : IEvent
+    {
+        public void CliRetInfoProcess(Socket cli, JsonData body)
+        {
+            Debug.Log("ManagerUsersInfo");
         }
     }
 }

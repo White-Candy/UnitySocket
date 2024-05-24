@@ -11,6 +11,10 @@ public class Launcher : MonoBehaviour
     {
         Config.init();
         ClientController.Instance.Init(Config.url, 4530);
+
+        GlobalParameterManager.TemplateWindow = GameObject.Find("Canvas/EditorCanvas").GetComponent<TemplateWindow>();
+        GlobalParameterManager.MainWindow = GameObject.Find("Canvas/MainCanvas").GetComponent<MainWindow>();
+
     }
 
     // Update is called once per frame

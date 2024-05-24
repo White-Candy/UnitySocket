@@ -49,16 +49,9 @@ namespace CandySocket
             }
             catch (Exception e)
             {
-                RetureServerBody body = new RetureServerBody();
-                var data = new JsonData();
-                data["content"] = e.Message;
-
-                body.type = "SocketNet";
-                body.body = data.ToJson();
-                string mess = JsonMapper.ToJson(body);
-
-                GlobalParameterManager.MessQueue.Enqueue(mess);
+                Debug.Log(e.Message);
                 isConnect = false;
+                Application.Quit();
             }
         }
 

@@ -13,6 +13,7 @@ namespace CandySocket
         ManagerLogin,
         EditorInfo,
         AddInfo,
+        ManagerUsersInfo
     }
 
     public interface IEvent
@@ -25,6 +26,10 @@ namespace CandySocket
         public void OnEvent(JsonData body)
         {
             Debug.Log("ManagerLogin: " + body.ToJson());
+            if (body["state"]?.ToString() == "Success")
+            {
+                UIController.State = (int)UIState.US_Main;
+            }
         }
     }
 
@@ -41,6 +46,14 @@ namespace CandySocket
         public void OnEvent(JsonData body)
         {
             Debug.Log("ManaAddInfOgerLogin: " + body.ToJson());
+        }
+    }
+
+    public class ManagerUsersInfo : IEvent
+    {
+        public void OnEvent(JsonData body)
+        {
+            Debug.Log("ManagerUsersInfo: " + body.ToJson());
         }
     }
 }

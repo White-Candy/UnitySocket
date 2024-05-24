@@ -16,6 +16,8 @@ namespace CandySocket
                     return new EditorInfo();
                 case EventType.AddInfo:
                     return new AddInfo();
+                case EventType.ManagerUsersInfo:
+                    return new ManagerUsersInfo();
                 default:
                     break;
             }

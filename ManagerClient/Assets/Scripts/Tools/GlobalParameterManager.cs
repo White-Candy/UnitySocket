@@ -9,9 +9,8 @@ namespace CandySocket
 
         public static CandySocket.UserData UserInfo;
 
-        public static TemplateWindow TemplateWindow = GameObject.Find("Canvas/EditorCanvas").GetComponent<TemplateWindow>();
-
-        public static MainWindow MainWindow = GameObject.Find("Canvas/MainCanvas").GetComponent<MainWindow>();
+        public static TemplateWindow TemplateWindow;// = GameObject.Find("Canvas/EditorCanvas").GetComponent<TemplateWindow>();
+        public static MainWindow MainWindow;// = GameObject.Find("Canvas/MainCanvas").GetComponent<MainWindow>();
     }
 }
 
