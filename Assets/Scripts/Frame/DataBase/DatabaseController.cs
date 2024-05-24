@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using UnityEngine;
 using static UnityEngine.Experimental.UIElements.UxmlAttributeDescription;
 
@@ -51,7 +52,21 @@ public static class DatabaseController
     {
         try
         {
-            return CheckThisUserEx(body["name"]?.ToString());
+            return CheckThisUserEx(body["name"]?.ToString()) && 
+                Kinder.users.Exists(x => x.password == body["password"]?.ToString());
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public static bool ManagerLoginMethod(JsonData body)
+    {
+        try
+        {
+            return Kinder.managers.Exists(x => x.name == body["name"]?.ToString()) &&
+                Kinder.managers.Exists(x => x.password == body["password"]?.ToString());
         }
         catch
         {

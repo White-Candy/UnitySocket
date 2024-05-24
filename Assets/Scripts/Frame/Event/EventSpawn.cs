@@ -21,6 +21,8 @@ namespace CandySocket
                     return new SearchEvent();
                 case EventType.UpdateInfo:
                     return new UpdateInfo();
+                case EventType.ManagerLogin:
+                    return new ManagerLogin();
                 default:
                     throw new ArgumentException("无效的策略类型");
             }

@@ -16,8 +16,16 @@ public class UserTable
     public int score3;
 }
 
+[Serializable]
+public class ManagerTable
+{
+    public string name;
+    public string password;
+}
+
 [CreateAssetMenu(fileName = "Kinder", menuName = "DataBase/KinderDatabase")]
 public class kinderDatabase : ScriptableObject
 {
     public List<UserTable> users = new List<UserTable>();
+    public List<ManagerTable> managers = new List<ManagerTable>();
 }

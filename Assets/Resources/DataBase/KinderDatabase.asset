@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: KinderDatabase
   m_EditorClassIdentifier: 
   users: []
+  managers:
+  - name: admin
+    password: 123456

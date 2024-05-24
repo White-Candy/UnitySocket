@@ -33,6 +33,11 @@ public class Launcher : MonoBehaviour
 
     void OnDestroy()
     {
+        //ServerContorller.Instance.Clear();
+    }
+
+    void OnApplicationQuit()
+    {
         ServerContorller.Instance.Clear();
-    }    
+    }
 }

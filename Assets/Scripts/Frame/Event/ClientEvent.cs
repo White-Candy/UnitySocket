@@ -11,7 +11,8 @@ namespace CandySocket
     {
         None,
         Close,
-        Login, 
+        Login,
+        ManagerLogin,
         Logon,
         Search,
         UpdateInfo
@@ -102,6 +103,26 @@ namespace CandySocket
             JsonData data = new JsonData();
             data["state"] = Ret;
             string json = JsonController.Instance.JsonToString("UpdateInfo", data);
+            ServerContorller.Instance.SendToClient(cli, json);
+        }
+    }
+
+    public class ManagerLogin : IEvent
+    {
+        public void CliRetInfoProcess(Socket cli, JsonData body)
+        {
+            Debug.Log("ManagerLogin");
+
+            string Ret = "Faild";
+            bool state = DatabaseController.ManagerLoginMethod(body);
+            JsonData data = new JsonData();
+            if (state == true)
+            {
+                Ret = "Success";
+            }
+            data["state"] = Ret;
+
+            string json = JsonController.Instance.JsonToString("ManagerLogin", data);
             ServerContorller.Instance.SendToClient(cli, json);
         }
     }
