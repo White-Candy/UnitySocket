@@ -5,9 +5,12 @@ using UnityEngine;
 
 public class UISpawn : MonoBehaviour
 {
+    public GameObject Item;
     void Start()
     {
-        
+        GlobalParameterManager.TemplateWindow = GameObject.Find("Canvas/EditorCanvas").GetComponent<TemplateWindow>();
+        GlobalParameterManager.MainWindow = GameObject.Find("Canvas/MainCanvas").GetComponent<MainWindow>();
+        GlobalParameterManager.UserItem = Item;
     }
 
     void Update()

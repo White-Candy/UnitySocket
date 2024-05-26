@@ -1,5 +1,5 @@
 ﻿using LitJson;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading;
@@ -57,14 +57,22 @@ namespace CandySocket
     {
         public void OnEvent(JsonData body)
         {
-            Debug.Log("ManagerUsersInfo: " + body.ToJson());
+            Debug.Log("ManagerUsersInfo: ");
 
             string list = body.ToJson();
             List<UserData> users = new List<UserData>();
             users = JsonMapper.ToObject<List<UserData>>(list);
 
+            // Create Item
+            int ItemPos = 0; //第一个Button的Y轴位置
+            int ItemHeight = 40; //Button的高度
+            int ItemCount = users.Count; //Button的数量
+            GameObject item_par = GameObject.Find("Content");
             foreach (var user in users)
             {
+                GameObject goClone = UnityEngine.Object.Instantiate(GlobalParameterManager.UserItem);
+                goClone.transform.parent = item_par.transform;
+                goClone.gameObject.SetActive(true);
                 //Debug.Log(user.id + " : " + user.name);
             }
         }
