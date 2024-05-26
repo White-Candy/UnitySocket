@@ -7,7 +7,7 @@ namespace CandySocket
 {
     public class UserData
     {
-        public int ID;
+        public int id;
         public string name;
         public string password;
         public string registry;
@@ -18,7 +18,7 @@ namespace CandySocket
 
         public UserData(int ID, string name, string password, DateTime registry, DateTime login, int score, int score2, int score3)
         {
-            this.ID = ID;
+            this.id = ID;
             this.name = name;
             this.password = password;
             this.registry = registry.ToString();
@@ -26,6 +26,11 @@ namespace CandySocket
             this.score = score;
             this.score2 = score2;
             this.score3 = score3;
+        }
+
+        public UserData()
+        {
+
         }
 
     }

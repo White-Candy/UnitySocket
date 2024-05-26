@@ -26,7 +26,7 @@ namespace CandySocket
 
         private static Socket m_socket;
 
-        static byte[] buffer = new byte[1024];
+        static byte[] buffer = new byte[10240];
 
         private bool isConnect = false;
         private string m_ip;
@@ -71,7 +71,7 @@ namespace CandySocket
 
                     if (JsonController.Instance.checkStringIsJson(mess))
                     {
-                        //Debug.Log("ReciveMessage: " + mess);
+                        //Debug.Log("ReciveMessage: " + mess); 
                         GlobalParameterManager.MessQueue.Enqueue(mess);
                     }
                 }

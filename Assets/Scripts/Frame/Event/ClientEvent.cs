@@ -133,6 +133,13 @@ namespace CandySocket
         public void CliRetInfoProcess(Socket cli, JsonData body)
         {
             Debug.Log("ManagerUsersInfo");
+
+            List<UserTable> users = DatabaseController.GetUsersInfo();
+            JsonData data = new JsonData();
+            data["body"] = JsonMapper.ToJson(users);
+            data["type"] = "ManagerUsersInfo";
+            string json = JsonMapper.ToJson(data);
+            ServerContorller.Instance.SendToClient(cli, json);
         }
     }
 }

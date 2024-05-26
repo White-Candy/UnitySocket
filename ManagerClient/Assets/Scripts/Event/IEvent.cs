@@ -28,6 +28,10 @@ namespace CandySocket
             Debug.Log("ManagerLogin: " + body.ToJson());
             if (body["state"]?.ToString() == "Success")
             {
+                JsonData data = new JsonData();
+                data["body"] = "{req get users info}";
+                string json = JsonController.Instance.JsonToString("ManagerUsersInfo", data);
+                ClientController.Instance.Send(json);
                 UIController.State = (int)UIState.US_Main;
             }
         }
@@ -54,6 +58,15 @@ namespace CandySocket
         public void OnEvent(JsonData body)
         {
             Debug.Log("ManagerUsersInfo: " + body.ToJson());
+
+            string list = body.ToJson();
+            List<UserData> users = new List<UserData>();
+            users = JsonMapper.ToObject<List<UserData>>(list);
+
+            foreach (var user in users)
+            {
+                //Debug.Log(user.id + " : " + user.name);
+            }
         }
     }
 }

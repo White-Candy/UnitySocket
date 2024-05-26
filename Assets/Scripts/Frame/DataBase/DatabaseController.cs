@@ -74,6 +74,11 @@ public static class DatabaseController
         }
     }
 
+    public static List<UserTable> GetUsersInfo() 
+    {
+        return Kinder.users;
+    }
+
     public static UserTable SearchUserUseName(JsonData body)
     {
         UserTable user = new UserTable();
