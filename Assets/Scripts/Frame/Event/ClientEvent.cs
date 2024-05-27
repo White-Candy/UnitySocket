@@ -17,6 +17,7 @@ namespace CandySocket
         UpdateInfo,
         ManagerLogin,
         ManagerUsersInfo,
+        ManagerEditor
     }
 
     public interface IEvent
@@ -139,6 +140,29 @@ namespace CandySocket
             data["body"] = JsonMapper.ToJson(users);
             data["type"] = "ManagerUsersInfo";
             string json = JsonMapper.ToJson(data);
+            ServerContorller.Instance.SendToClient(cli, json);
+        }
+    }
+
+    public class ManagerEditor : IEvent
+    {
+        public void CliRetInfoProcess(Socket cli, JsonData body)
+        {
+            Debug.Log("ManagerEditor");
+
+            string Ret = "Faild";
+            bool state = DatabaseController.EditorUserInfo(body);
+            JsonData data = new JsonData();
+            if (state == true)
+            {
+                Ret = "Success";
+            }
+            data["state"] = Ret;
+            data["name"] = body["name"]?.ToString();
+            data["password"] = body["password"]?.ToString();
+
+            string json = JsonController.Instance.JsonToString("ManagerEditor", data);
+            GlobalParam.uimessage.AdditionalContent(json);
             ServerContorller.Instance.SendToClient(cli, json);
         }
     }

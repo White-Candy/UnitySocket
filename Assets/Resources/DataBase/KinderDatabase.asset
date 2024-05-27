@@ -24,24 +24,24 @@ MonoBehaviour:
   - id: 1
     name: ewr
     password: werwer
-    registry: 
-    login: 
+    registry: 2023/06/12
+    login: 1999/12/12
     score: 0
     score2: 0
     score3: 0
   - id: 2
     name: sfsdf
     password: dfsdfd
-    registry: 
-    login: 
+    registry: 2023/06/13
+    login: 1999/12/12
     score: 0
     score2: 0
     score3: 0
   - id: 3
     name: cvcv
     password: cvcvcvc
-    registry: 
-    login: 
+    registry: 2023/06/13
+    login: 1999/12/12
     score: 0
     score2: 0
     score3: 0

@@ -15,13 +15,13 @@ public class UserTable
     public int score2;
     public int score3;
 
-    public UserTable(int ID, string name, string password, DateTime registry, DateTime login, int score, int score2, int score3)
+    public UserTable(int ID, string name, string password, string registry, string login, int score, int score2, int score3)
     {
         this.id = ID;
         this.name = name;
         this.password = password;
-        this.registry = registry.ToString();
-        this.login = login.ToString();
+        this.registry = registry;
+        this.login = login;
         this.score = score;
         this.score2 = score2;
         this.score3 = score3;

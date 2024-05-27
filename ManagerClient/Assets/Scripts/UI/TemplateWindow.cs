@@ -31,7 +31,8 @@ public class TemplateWindow : BaseUI
     {
         btnClose.onClick.AddListener(() =>
         {
-            this.gameObject.SetActive(false);
+            UIController.TemplateClose = true;
+            //StartCoroutine(Close());
         });
 
         btnOk.onClick.AddListener(() =>
@@ -52,7 +53,11 @@ public class TemplateWindow : BaseUI
 
     void Update()
     {
-        UIController.OnEditorWin();
+        UIController.OnTemplateWin(inputID, inputName, inputPwd);
+        if (UIController.TemplateClose == true)
+        {
+            StartCoroutine(Close());
+        }
     }
 
     public void CtrolStyle(string tag, string title, bool id_active)
@@ -70,5 +75,14 @@ public class TemplateWindow : BaseUI
     public bool checkInputIsNull(InputField input)
     {
         return input.IsActive() && string.IsNullOrEmpty(input.text);
+    }
+
+    public IEnumerator Close()
+    {
+        UIController.TemplateClose = false;
+        UIController.TemplateHandle.Close();
+        yield return new WaitUntil(UIController.TempStateIsEquie);
+        UIController.State = (int)UIState.US_Main;
+        //this.gameObject.SetActive(false);
     }
 }

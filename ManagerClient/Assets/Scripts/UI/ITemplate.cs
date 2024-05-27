@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CandySocket
 {
@@ -15,13 +16,23 @@ namespace CandySocket
         /// <param name="param[2]"> Password </param>
         /// <returns></returns>
         bool OnClicked(params object[] param);
+
+        void Close();
+
+        /// <summary>
+        /// 窗口中 InputField 的初始化
+        /// </summary>
+        /// <param name="param[0]"> ID </param>
+        /// <param name="param[1]"> Name </param>
+        /// <param name="param[2]"> Password </param>
+        /// <returns></returns>
+        void Init(params object[] control);
     }
 
     public class Login : ITemplate
     {
         public bool OnClicked(params object[] param)
         {
-            Debug.Log("Login Clicked");
             string name = param[1] as string;
             string password = param[2] as string;
 
@@ -32,15 +43,58 @@ namespace CandySocket
             ClientController.Instance.Send(json); 
             return true;
         }
+
+        public void Init(params object[] control)
+        {
+            InputField name = control[1] as InputField;
+            InputField password = control[2] as InputField;
+            name.text = "";
+            password.text = "";
+        }
+
+        public void Close()
+        {
+            Debug.Log("Login close");
+            UIController.State = (int)UIState.US_None;
+            UIController.TempState = TempUIState.TUS_None;
+        }
+
     }
 
     public class Editor : ITemplate
     {
         public bool OnClicked(params object[] param)
         {
-            Debug.Log("Editor Clicked");
+            string id = param[0] as string;
+            string name = param[1] as string;
+            string password = param[2] as string;
+
+            JsonData data = new JsonData();
+            data["id"] = id;
+            data["name"] = name;
+            data["password"] = password;
+            string json = JsonController.Instance.JsonToString("ManagerEditor", data);
+            ClientController.Instance.Send(json);
             return true;
         }
+
+        public void Init(params object[] control)
+        {
+            InputField id = control[0] as InputField;
+            InputField name = control[1] as InputField;
+            InputField password = control[2] as InputField;
+
+            id.text = GlobalParameterManager.UserInfo.id.ToString();
+            name.text = GlobalParameterManager.UserInfo.name;
+            password.text = GlobalParameterManager.UserInfo.password;
+        }
+
+        public void Close()
+        {
+            // UIController.State = (int)UIState.US_Main;
+            UIController.TempState = TempUIState.TUS_None;
+        }
+
     }
 
     public class Add : ITemplate
@@ -50,28 +104,45 @@ namespace CandySocket
             Debug.Log("Add Clicked");
             return true;
         }
+
+        public void Init(params object[] control)
+        {
+            InputField id = control[0] as InputField;
+            InputField name = control[1] as InputField;
+            InputField password = control[2] as InputField;
+
+            id.text = "";
+            name.text = "";
+            password.text = "";
+        }
+
+        public void Close()
+        {
+            Debug.Log("Add close");
+            UIController.State = (int)UIState.US_Main;
+            UIController.TempState = TempUIState.TUS_None;
+        }
+
     }
 
     public static class TemplateSpawn
     {
         public static ITemplate Create(TempUIState state)
         {
-            ITemplate template = null;
             switch(state)
             {
+                case TempUIState.TUS_None:
+                    return null;
                 case TempUIState.TUS_Login:
-                    template = new Login();
-                    break;
+                    return new Login();
                 case TempUIState.TUS_Eidtor:
-                    template = new Editor();
-                    break;
+                    return new Editor();
                 case TempUIState.TUS_Add:
-                    template = new Add();
-                    break;
+                    return new Add();
                 default:
                     break;
             }
-            return template;
+            return null;
         }
     }
 }

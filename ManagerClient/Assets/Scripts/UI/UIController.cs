@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CandySocket
 {
@@ -62,6 +64,8 @@ namespace CandySocket
         public static TempUIState TempState = TempUIState.TUS_Login;
         private static TempUIState CurrTempState = TempUIState.TUS_None;
 
+        public static bool TemplateClose = false; //Template窗口关闭信号
+
         public static void OnGUI()
         {
             if (State != CurrState)
@@ -81,16 +85,26 @@ namespace CandySocket
             }
         }
 
-        public static void OnEditorWin()
+        public static void OnTemplateWin(InputField id, InputField name, InputField pwd)
         {
             if (TempState != CurrTempState)
             {
+                //Debug.Log("Change CurrTempState");
                 CurrTempState = TempState;
                 TemplateParam.EnterNewStatus(CurrTempState);
                 GlobalParameterManager.TemplateWindow.CtrolStyle(TemplateParam.tag, TemplateParam.title, TemplateParam.idActive);
 
                 TemplateHandle = TemplateSpawn.Create(CurrTempState);
+                if (TemplateHandle != null)
+                {
+                    TemplateHandle.Init(id, name, pwd);
+                }
             }
+        }
+
+        public static bool TempStateIsEquie()
+        {
+            return TempState == CurrTempState;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using LitJson;
+﻿using CandySocket;
+using LitJson;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,6 +22,8 @@ public static class DatabaseController
         }
     }
 
+    public static List<int> idList = new List<int>();
+
     public static bool LogonMethod(JsonData body)
     {
         if (CheckThisUserEx(body["name"]?.ToString()))
@@ -28,8 +31,9 @@ public static class DatabaseController
 
         try
         {
+            int id = UnityEngine.Random.Range(0, idList.Count);
             UserTable user = new UserTable();
-            user.id = Kinder.users.Count;
+            user.id = idList[id];
             user.name = body["name"]?.ToString();
             user.password = body["password"]?.ToString();
             user.registry = body["registry"]?.ToString();
@@ -39,6 +43,7 @@ public static class DatabaseController
             user.score3 = int.Parse(body["score3"]?.ToString());
 
             Kinder.users.Add(user);
+            idList.Remove(idList[id]);
             return true;
         }
         catch(Exception ex)
@@ -112,6 +117,27 @@ public static class DatabaseController
             catch { return false; }
         }
         return false;
+    }
+
+    public static bool EditorUserInfo(JsonData body)
+    {
+        int id = int.Parse(body["id"]?.ToString());
+        string name = body["name"]?.ToString();
+        string pwd = body["password"]?.ToString();
+        if (CheckThisUserEx(name))
+        {
+            int name_idx = Kinder.users.FindIndex((x) => x.name == name);
+            int ex_id = Kinder.users[name_idx].id;
+            if (id != ex_id)
+            {
+                return false;
+            }
+        }
+
+        int idx = Kinder.users.FindIndex(x => x.id == id);
+        Kinder.users[idx].name = name;
+        Kinder.users[idx].password = pwd;
+        return true;
     }
 
     public static bool CheckThisUserEx(string name)

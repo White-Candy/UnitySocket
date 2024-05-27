@@ -120,7 +120,7 @@ namespace CandySocket
             catch(Exception ex)
             {
                 //GlobalParam.uimessage.AdditionalContent("Clear: " + ex.Message);
-                Debug.Log("Clear: " + ex.Message);
+                //Debug.Log("Clear: " + ex.Message);
             }
         }
 

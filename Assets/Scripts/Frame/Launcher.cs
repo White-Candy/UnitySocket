@@ -11,19 +11,14 @@ public class Launcher : MonoBehaviour
     void Start()
     {
         ServerContorller.Instance.StartListen(4530);
-        //JsonData data = new JsonData();
-        //string json = JsonMapper.ToJson(DatabaseController.Kinder.users);
-        //data["body"] = json;
-        ////Debug.Log(data.ToJson());
-
-        //string list = data["body"]?.ToString();
-        //List<UserTable> users = new List<UserTable>();
-        //users = JsonMapper.ToObject<List<UserTable>>(list);
-
-        //foreach(var  user in users )
-        //{
-        //    Debug.Log(user.id + " : " + user.name);
-        //}
+        for (int i = 0; i < 10000; i++)
+        {
+            if (DatabaseController.Kinder.users.Exists(x => x.id == i))
+            {
+                continue;
+            }
+            DatabaseController.idList.Add(i);
+        }
     }
 
     // Update is called once per frame
