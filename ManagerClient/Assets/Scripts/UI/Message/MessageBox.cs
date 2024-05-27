@@ -12,6 +12,9 @@ public class MessageBox : BaseUI
     public Button Cancel;
     public Button Close;
 
+    public Text Message;
+    public Text Title;
+
     void Start()
     {
         UIController.winDic.Add(UIState.US_Message, this);
@@ -43,6 +46,14 @@ public class MessageBox : BaseUI
 
     void CloseMessageBox()
     {
-        UIController.State = (int)(UIState.US_Main);
+        this.gameObject.SetActive(false);
+    }
+
+    public void SetStyle(string title, string hint, bool active, string btn_text)
+    {
+        Title.text = title;
+        Message.text = hint;
+        Ok.gameObject.SetActive(active);
+        Cancel.GetComponentInChildren<Text>().text = btn_text;
     }
 }

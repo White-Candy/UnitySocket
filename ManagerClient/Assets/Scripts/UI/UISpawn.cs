@@ -9,6 +9,7 @@ public class UISpawn : MonoBehaviour
     {
         GlobalParameterManager.TemplateWindow = GameObject.Find("Canvas/EditorCanvas").GetComponent<TemplateWindow>();
         GlobalParameterManager.MainWindow = GameObject.Find("Canvas/MainCanvas").GetComponent<MainWindow>();
+        GlobalParameterManager.MessageBox = GameObject.Find("Canvas/MessageBox").GetComponent<MessageBox>();
     }
 
     void Update()

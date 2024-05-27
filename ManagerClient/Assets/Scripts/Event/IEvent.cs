@@ -36,6 +36,11 @@ namespace CandySocket
                 ClientController.Instance.Send(json);
                 UIController.State = (int)UIState.US_Main;
             }
+            else
+            {
+                GlobalParameterManager.MessageBox.SetStyle("", "登录失败", false, "确定");
+                UIController.State = (int)(UIState.US_Eidtor | UIState.US_Message);
+            }
         }
     }
 

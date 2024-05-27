@@ -11,6 +11,7 @@ namespace CandySocket
 
         public static TemplateWindow TemplateWindow;// = GameObject.Find("Canvas/EditorCanvas").GetComponent<TemplateWindow>();
         public static MainWindow MainWindow;// = GameObject.Find("Canvas/MainCanvas").GetComponent<MainWindow>();
+        public static MessageBox MessageBox;
 
         public static List<UserData> UsersInfo = new List<UserData>(); //所有用户的基本信息
 
