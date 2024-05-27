@@ -27,6 +27,8 @@ namespace CandySocket
                     return new ManagerUsersInfo();
                 case EventType.ManagerEditor:
                     return new ManagerEditor();
+                case EventType.ManagerDelete:
+                    return new ManagerDelete();
                 default:
                     throw new ArgumentException("无效的策略类型");
             }

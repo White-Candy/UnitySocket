@@ -12,14 +12,14 @@ namespace CandySocket
             {
                 case EventType.ManagerLogin:
                     return new ManagerLogin();
-                case EventType.EditorInfo:
-                    return new EditorInfo();
                 case EventType.AddInfo:
                     return new AddInfo();
                 case EventType.ManagerUsersInfo:
                     return new ManagerUsersInfo();
                 case EventType.ManagerEditor:
                     return new ManagerEditor();
+                case EventType.ManagerDelete:
+                    return new ManagerDelete();
                 default:
                     break;
             }

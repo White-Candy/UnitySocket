@@ -101,8 +101,8 @@ namespace CandySocket
             try
             {
                 isConnect = false;
+                m_socket.Close();
                 m_thread.Abort();
-                //m_socket.Close();
             }
             catch
             {

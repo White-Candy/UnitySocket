@@ -12,10 +12,10 @@ namespace CandySocket
     {
         None,
         ManagerLogin,
-        EditorInfo,
         AddInfo,
         ManagerUsersInfo,
-        ManagerEditor
+        ManagerEditor,
+        ManagerDelete
     }
 
     public interface IEvent
@@ -36,14 +36,6 @@ namespace CandySocket
                 ClientController.Instance.Send(json);
                 UIController.State = (int)UIState.US_Main;
             }
-        }
-    }
-
-    public class EditorInfo : IEvent
-    {
-        public void OnEvent(JsonData body)
-        {
-            Debug.Log("EditorInfo: " + body.ToJson());
         }
     }
 
@@ -74,9 +66,24 @@ namespace CandySocket
             {
                 int idx = GlobalParameterManager.Items.FindIndex((x) => 
                         int.Parse(x.Id.GetComponentInChildren<Text>().text) == GlobalParameterManager.SelectId);
-                Debug.Log(idx + " | " + GlobalParameterManager.SelectId);
                 GlobalParameterManager.Items[idx].EditorItem(body["name"]?.ToString(), body["password"]?.ToString());
                 UIController.TemplateClose = true;
+            }
+        }
+    }
+
+    public class ManagerDelete : IEvent
+    {
+        public void OnEvent(JsonData body)
+        {
+            Debug.Log("ManagerDelete : " + body.ToJson());
+            if (body["state"]?.ToString() == "Success")
+            {
+                int idx = GlobalParameterManager.Items.FindIndex((x) =>
+                        int.Parse(x.Id.GetComponentInChildren<Text>().text) == GlobalParameterManager.SelectId);
+                GlobalParameterManager.Items[idx].DeleteItem();
+                GlobalParameterManager.Items.RemoveAt(idx);
+                UIController.State = (int)(UIState.US_Main);
             }
         }
     }

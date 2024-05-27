@@ -1,4 +1,5 @@
 ﻿using CandySocket;
+using LitJson;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -50,11 +51,23 @@ public class ItemScript : MonoBehaviour
     private void DeleteClicked()
     {
         //Debug.Log("Delete: " + Name.GetComponentInChildren<Text>().text);
+        UserData user = new UserData();
+        user.id = int.Parse(Id.GetComponentInChildren<Text>().text);
+        GlobalParameterManager.UserInfo = user;
+        GlobalParameterManager.SelectId = user.id;
+
+        UIController.State = (int)(UIState.US_Message | UIState.US_Main);
     }
 
     public void EditorItem(string name, string password)
     {
         Name.GetComponentInChildren<Text>().text = name;
         Password.GetComponentInChildren<Text>().text = password;
+    }
+
+    public void DeleteItem()
+    {
+        this.gameObject.SetActive(false);
+        Destroy(this.gameObject);
     }
 }

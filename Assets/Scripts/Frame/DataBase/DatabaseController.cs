@@ -140,6 +140,19 @@ public static class DatabaseController
         return true;
     }
 
+    public static bool DeleteUserInfo(JsonData body)
+    {
+        int id = int.Parse(body["id"]?.ToString());
+        if (Kinder.users.Exists((x) => x.id == id))
+        {
+            int idx = Kinder.users.FindIndex(((x) => x.id == id));
+            Kinder.users.RemoveAt(idx);
+            idList.Add(id);
+            return true;
+        }
+        return false;
+    }
+
     public static bool CheckThisUserEx(string name)
     {
         return Kinder.users.Exists(x => x.name == name);
