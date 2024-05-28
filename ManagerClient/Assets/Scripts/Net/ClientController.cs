@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -26,7 +27,7 @@ namespace CandySocket
 
         private static Socket m_socket;
 
-        static byte[] buffer = new byte[10240];
+        static byte[] buffer = new byte[1024];
 
         private bool isConnect = false;
         private string m_ip;
@@ -68,11 +69,24 @@ namespace CandySocket
                     int length = m_socket.Receive(buffer);
                     string mess = Encoding.Unicode.GetString(buffer, 0, length);
                     Array.Clear(buffer, 0, buffer.Length);
-
-                    if (JsonController.Instance.checkStringIsJson(mess))
+                    
+                    
+                    string endfield = mess.Substring(mess.Count() - 4, 4);
+                    if (endfield == "-end")
                     {
-                        //Debug.Log("ReciveMessage: " + mess); 
-                        GlobalParameterManager.MessQueue.Enqueue(mess);
+                        mess = mess.Substring(0, mess.Count() - 4);
+                        GlobalParameterManager.Message += mess;
+                        if (JsonController.Instance.checkStringIsJson(GlobalParameterManager.Message))
+                        {
+                            //Debug.Log("ReciveMessage: " + mess); 
+                            GlobalParameterManager.MessQueue.Enqueue(GlobalParameterManager.Message);
+                            GlobalParameterManager.Message = "";
+                        }
+                    }
+                    else
+                    {
+                        GlobalParameterManager.Message += mess;
+                        //Debug.Log(GlobalParameterManager.Message);
                     }
                 }
                 catch (Exception ex)

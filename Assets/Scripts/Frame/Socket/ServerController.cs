@@ -51,49 +51,60 @@ namespace CandySocket
             {
                 Socket client = socket.Accept();
 
-                string mess = "Hi there, I accept you request at " + DateTime.Now.ToString();
-                SendToClient(client, mess);
+                //string mess = "Hi there, I accept you request at " + DateTime.Now.ToString();
+                //SendToClient(client, mess);
 
                 //开启线程接收客户端信息
-                Thread clientThread = new Thread(ReciveMessage);
-                clientThread.Start(client);
-                ctList.Add(clientThread);
+                try
+                {
+                    Thread clientThread = new Thread(ReciveMessage);
+                    clientThread.Start(client);
+                    ctList.Add(clientThread);
+                }
+                catch
+                {
+
+                }
             }
         }
 
         // 发送信息
         public void SendToClient(Socket cli, string mess)
         {
-            cli.Send(Encoding.Unicode.GetBytes(mess));
+            cli.Send(Encoding.Unicode.GetBytes(mess + "-end"));
         }
 
         // 接收客户端的讯息
         public void ReciveMessage(object obj)
         {
-            while (!Exit)
+            try
             {
-                Socket client = obj as Socket;
-                try
+                while (!Exit)
                 {
-                    int length = client.Receive(result);
-                    string message = Encoding.Unicode.GetString(result, 0, length);
+                    Socket client = obj as Socket;
+                    try
+                    {
+                        int length = client.Receive(result);
+                        string message = Encoding.Unicode.GetString(result, 0, length);
 
-                    if (!string.IsNullOrEmpty(message))
-                    {
-                        CliRetInfoProcess(client, message);
+                        if (!string.IsNullOrEmpty(message))
+                        {
+                            CliRetInfoProcess(client, message);
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    //GlobalParam.uimessage.AdditionalContent(ex.Message);
-                    Debug.Log(ex.Message);
-                    if (client != null)
+                    catch (Exception ex)
                     {
-                        client.Shutdown(SocketShutdown.Both);
-                        client.Close(0);
+                        //GlobalParam.uimessage.AdditionalContent(ex.Message);
+                        Debug.Log(ex.Message);
+                        if (client != null)
+                        {
+                            client.Shutdown(SocketShutdown.Both);
+                            client.Close(0);
+                        }
                     }
                 }
             }
+            catch { }
         }
 
         public void CliRetInfoProcess(Socket cli, string ret)

@@ -34,11 +34,14 @@ namespace CandySocket
                 data["body"] = "{req get users info}";
                 string json = JsonController.Instance.JsonToString("ManagerUsersInfo", data);
                 ClientController.Instance.Send(json);
-                UIController.State = (int)UIState.US_Main;
+
+                UIController.TemplateHandle.CloseState = TempCloseState.ChangeWin;
+                //UIController.State = (int)UIState.US_Main;
+                UIController.TemplateClose = true;
             }
             else
             {
-                GlobalParameterManager.MessageBox.SetStyle("", "登录失败", false, "确定");
+                GlobalParameterManager.MessageBox.SetStyle("提示", "登录失败", false, "确定");
             }
         }
     }
@@ -65,10 +68,7 @@ namespace CandySocket
                 hint = "添加失败！";
             }
 
-            GlobalParameterManager.MessageBox.SetStyle("提示", hint, false, "确定", () => 
-            {
-                UIController.State = (int)(UIState.US_Main);
-            });
+            GlobalParameterManager.MessageBox.SetStyle("提示", hint, false, "确定");
         }
     }
 
@@ -93,6 +93,10 @@ namespace CandySocket
                         int.Parse(x.Id.GetComponentInChildren<Text>().text) == GlobalParameterManager.SelectId);
                 GlobalParameterManager.Items[idx].EditorItem(body["name"]?.ToString(), body["password"]?.ToString());
                 UIController.TemplateClose = true;
+            }
+            else
+            {
+                GlobalParameterManager.MessageBox.SetStyle("提示", "修改失败", false, "确定");
             }
         }
     }

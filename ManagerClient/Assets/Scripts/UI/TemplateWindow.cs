@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using CandySocket;
+using System;
 
 public class TemplateWindow : BaseUI
 {
@@ -31,6 +32,7 @@ public class TemplateWindow : BaseUI
     {
         btnClose.onClick.AddListener(() =>
         {
+            UIController.TemplateHandle.CloseCheck();
             UIController.TemplateClose = true;
             //StartCoroutine(Close());
         });
@@ -77,7 +79,7 @@ public class TemplateWindow : BaseUI
         return input.IsActive() && string.IsNullOrEmpty(input.text);
     }
 
-    public IEnumerator Close()
+    public IEnumerator Close(Action claaback = null)
     {
         UIController.TemplateClose = false;
         UIController.TemplateHandle.Close();

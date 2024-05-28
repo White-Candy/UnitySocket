@@ -11,6 +11,9 @@ public class MainWindow : BaseUI
     public Button Add;
     public Button Refresh;
 
+    public Button Min;
+    public Button Close;
+
     void Start()
     {
         UIController.winDic.Add(UIState.US_Main, this);
@@ -23,6 +26,17 @@ public class MainWindow : BaseUI
         Add.onClick.AddListener(() =>
         {
             AddUser();
+        });
+
+        Close.onClick.AddListener(() => 
+        { 
+            UIController.State = (int)UIState.US_None;
+            Application.Quit();
+        });
+
+        Min.onClick.AddListener(() =>
+        {
+            WindowBar.MinWindow();
         });
     }
 

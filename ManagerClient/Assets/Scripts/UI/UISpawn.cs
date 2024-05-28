@@ -9,6 +9,15 @@ public class UISpawn : MonoBehaviour
     public MainWindow MainWindow;
     public MessageBox MessageBox;
 
+    void Awake()
+    {
+        //if (!Debug.isDebugBuild)
+        //{
+        //    //WindowBar.HideWindowBar();
+        //    //Screen.SetResolution(1280, 720, true);
+        //}
+    }
+
     void Start()
     {
         GlobalParameterManager.TemplateWindow = Template;

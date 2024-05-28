@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
+using System.Runtime.InteropServices;
 using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.UI;
@@ -54,7 +56,7 @@ namespace CandySocket
 
     public static class UIController
     {
-        public static ITemplate TemplateHandle;
+        public static AbstractTemplate TemplateHandle;
 
         public static Dictionary<UIState, BaseUI> winDic = new Dictionary<UIState, BaseUI>();
 

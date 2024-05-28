@@ -18,6 +18,8 @@ namespace CandySocket
         public static List<ItemScript> Items = new List<ItemScript>(); //主界面中的所有Item
 
         public static int SelectId = -1; //选择item的用户id
+
+        public static string Message; // 接受服务器分段信息存储
     }
 }
 
