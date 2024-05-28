@@ -1,5 +1,6 @@
 ﻿using CandySocket;
 using LitJson;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,10 +16,10 @@ public class MessageBox : BaseUI
     public Text Message;
     public Text Title;
 
+    private Action CloseCallback;
+
     void Start()
     {
-        UIController.winDic.Add(UIState.US_Message, this);
-
         Ok.onClick.AddListener(() => 
         {
             JsonData data = new JsonData();
@@ -47,13 +48,17 @@ public class MessageBox : BaseUI
     void CloseMessageBox()
     {
         this.gameObject.SetActive(false);
+        if (CloseCallback != null ) CloseCallback();
     }
 
-    public void SetStyle(string title, string hint, bool active, string btn_text)
+    public void SetStyle(string title, string hint, bool active, string btn_text, Action callback = null)
     {
         Title.text = title;
         Message.text = hint;
         Ok.gameObject.SetActive(active);
         Cancel.GetComponentInChildren<Text>().text = btn_text;
+
+        this.gameObject.SetActive(true);
+        if (callback != null ) CloseCallback = callback;
     }
 }

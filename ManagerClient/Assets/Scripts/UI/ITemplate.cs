@@ -1,6 +1,8 @@
 ﻿using LitJson;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -102,6 +104,19 @@ namespace CandySocket
         public bool OnClicked(params object[] param)
         {
             Debug.Log("Add Clicked");
+            
+            string name = param[1] as string;
+            string password = param[2] as string;
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(password))
+            {
+                GlobalParameterManager.MessageBox.SetStyle("添加异常", "文本不可为空", false, "确定");
+                return false;
+            }
+
+            UserData user = new UserData(-1, name, password, DateTime.Now, new DateTime(), 0, 0, 0);
+            JsonData data = JsonMapper.ToObject(JsonMapper.ToJson(user));
+            string json = JsonController.Instance.JsonToString("Logon", data);
+            ClientController.Instance.Send(json);
             return true;
         }
 

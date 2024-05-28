@@ -12,8 +12,8 @@ namespace CandySocket
             {
                 case EventType.ManagerLogin:
                     return new ManagerLogin();
-                case EventType.AddInfo:
-                    return new AddInfo();
+                case EventType.Logon:
+                    return new Logon();
                 case EventType.ManagerUsersInfo:
                     return new ManagerUsersInfo();
                 case EventType.ManagerEditor:

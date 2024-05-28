@@ -56,7 +56,7 @@ public class ItemScript : MonoBehaviour
         GlobalParameterManager.UserInfo = user;
         GlobalParameterManager.SelectId = user.id;
 
-        UIController.State = (int)(UIState.US_Message | UIState.US_Main);
+        GlobalParameterManager.MessageBox.SetStyle("删除学生信息", "是否删除该信息？", true, "取消");
     }
 
     public void EditorItem(string name, string password)

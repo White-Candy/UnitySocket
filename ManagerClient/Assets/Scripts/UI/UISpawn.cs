@@ -5,11 +5,15 @@ using UnityEngine;
 
 public class UISpawn : MonoBehaviour
 {
+    public TemplateWindow Template;
+    public MainWindow MainWindow;
+    public MessageBox MessageBox;
+
     void Start()
     {
-        GlobalParameterManager.TemplateWindow = GameObject.Find("Canvas/EditorCanvas").GetComponent<TemplateWindow>();
-        GlobalParameterManager.MainWindow = GameObject.Find("Canvas/MainCanvas").GetComponent<MainWindow>();
-        GlobalParameterManager.MessageBox = GameObject.Find("Canvas/MessageBox").GetComponent<MessageBox>();
+        GlobalParameterManager.TemplateWindow = Template;
+        GlobalParameterManager.MainWindow = MainWindow;
+        GlobalParameterManager.MessageBox = MessageBox;
     }
 
     void Update()

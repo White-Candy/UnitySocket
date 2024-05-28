@@ -19,7 +19,6 @@ namespace CandySocket
         US_None = 0,
         US_Eidtor = 1 << 0,
         US_Main = 1 << 1,
-        US_Message = 1 << 2,
     }
 
     public static class TemplateParam // 作为EditorCanvs 修改控件状态的参数

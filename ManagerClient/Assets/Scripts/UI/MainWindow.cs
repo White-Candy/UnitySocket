@@ -62,6 +62,7 @@ public class MainWindow : BaseUI
 
     void AddUser()
     {
-       
+        UIController.TempState = TempUIState.TUS_Add;
+        UIController.State = (int)(UIState.US_Eidtor | UIState.US_Main);
     }
 }

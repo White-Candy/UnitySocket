@@ -11,8 +11,8 @@ namespace CandySocket
     public enum EventType
     {
         None,
+        Logon,
         ManagerLogin,
-        AddInfo,
         ManagerUsersInfo,
         ManagerEditor,
         ManagerDelete
@@ -39,16 +39,36 @@ namespace CandySocket
             else
             {
                 GlobalParameterManager.MessageBox.SetStyle("", "登录失败", false, "确定");
-                UIController.State = (int)(UIState.US_Eidtor | UIState.US_Message);
             }
         }
     }
 
-    public class AddInfo : IEvent
+    public class Logon : IEvent
     {
         public void OnEvent(JsonData body)
         {
-            Debug.Log("ManaAddInfOgerLogin: " + body.ToJson());
+            Debug.Log("Logon: " + body.ToJson());
+            string state = body["state"]?.ToString();
+            string hint;
+            if (state == "Success")
+            {
+                hint = "添加成功！";
+
+                //添加成功更新主面板
+                JsonData data = new JsonData();
+                data["body"] = "{req get users info}";
+                string json = JsonController.Instance.JsonToString("ManagerUsersInfo", data);
+                ClientController.Instance.Send(json);
+            }
+            else
+            {
+                hint = "添加失败！";
+            }
+
+            GlobalParameterManager.MessageBox.SetStyle("提示", hint, false, "确定", () => 
+            {
+                UIController.State = (int)(UIState.US_Main);
+            });
         }
     }
 
@@ -88,6 +108,7 @@ namespace CandySocket
                         int.Parse(x.Id.GetComponentInChildren<Text>().text) == GlobalParameterManager.SelectId);
                 GlobalParameterManager.Items[idx].DeleteItem();
                 GlobalParameterManager.Items.RemoveAt(idx);
+                GlobalParameterManager.MessageBox.gameObject.SetActive(false);
                 UIController.State = (int)(UIState.US_Main);
             }
         }
