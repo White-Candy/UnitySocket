@@ -6,13 +6,21 @@ using UnityEngine;
 [Serializable]
 public class UserTable
 {
+
     public int id;
+
     public string name;
+
     public string password;
+
     public string registry;
+
     public string login;
+
     public int score;
+
     public int score2;
+
     public int score3;
 
     public UserTable(int ID, string name, string password, string registry, string login, int score, int score2, int score3)

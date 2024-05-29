@@ -5,6 +5,8 @@ using UnityEngine;
 using CandySocket;
 using System.Net.Sockets;
 using LitJson;
+using UnityEditor;
+using System.IO;
 
 public class Launcher : MonoBehaviour
 {
@@ -42,11 +44,20 @@ public class Launcher : MonoBehaviour
 
     void OnDestroy()
     {
+        //EditorUtility.SetDirty(DatabaseController.Kinder);
+        //AssetDatabase.SaveAssets();
         //ServerContorller.Instance.Clear();
+        //JsonUtility.FromJsonOverwrite(json, DatabaseController.Kinder);
+        string json = JsonUtility.ToJson(DatabaseController.Kinder);
+        File.WriteAllText(Application.persistentDataPath + "/Data.json", json);
     }
 
     void OnApplicationQuit()
     {
+        //EditorUtility.SetDirty(DatabaseController.Kinder);
+        //AssetDatabase.SaveAssets();
+        string json = JsonUtility.ToJson(DatabaseController.Kinder);
+        File.WriteAllText(Application.persistentDataPath + "/Data.json", json);
         ServerContorller.Instance.Clear();
     }
 }

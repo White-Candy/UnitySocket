@@ -14,7 +14,7 @@ public class UISpawn : MonoBehaviour
         //if (!Debug.isDebugBuild)
         //{
         //    //WindowBar.HideWindowBar();
-        //    //Screen.SetResolution(1280, 720, true);
+         Screen.SetResolution(1280, 720, false);
         //}
     }
 

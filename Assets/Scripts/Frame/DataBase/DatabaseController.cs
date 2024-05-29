@@ -3,12 +3,14 @@ using LitJson;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml.Linq;
 using UnityEngine;
 using static UnityEngine.Experimental.UIElements.UxmlAttributeDescription;
 
 public static class DatabaseController
 {
+    private static bool Init = false;
     private static kinderDatabase m_kinder;
     public static kinderDatabase Kinder
     {
@@ -18,6 +20,14 @@ public static class DatabaseController
             {
                 m_kinder = Resources.Load("DataBase/KinderDatabase") as kinderDatabase;
             }
+
+            if (File.Exists(Application.persistentDataPath + "/Data.json") && !Init)
+            {
+                string jsonStr = File.ReadAllText(Application.persistentDataPath + "/Data.json");
+                JsonUtility.FromJsonOverwrite(jsonStr, m_kinder);
+                Init = true;
+            }
+
             return m_kinder;
         }
     }
